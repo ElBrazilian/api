@@ -1,11 +1,19 @@
 import datetime
-from translate import translate
+from .translate import translate
 
 from hashlib import *
 import math
 
 import string
 digs = string.digits + string.ascii_letters
+
+import requests
+import json
+def getIp():
+	request = requests.get('https://api.myip.com/')
+	ip = json.loads(request.content)['ip']
+
+	return ip
 
 def int2base(x, base):
     if x < 0:
@@ -34,10 +42,9 @@ def hash(date, pseudo, ip, score):
 	m.update(str(str(date) + str(pseudo) + str(ip) + str(score)).encode())
 	return m.hexdigest()
 
-def makeToken(payload, scoreToBase):
+def makeToken(payload, scoreToBase, ip):
 	date  = datetime.date.today()
 	# get ip from django
-	ip = '78.247.42.62'
 	has = hash(date, payload['username'], ip, payload['score'])
 
 	chunkSize = len(scoreToBase)//3
@@ -51,10 +58,10 @@ def makeToken(payload, scoreToBase):
 
 	return ''.join(has)
 
-def isCorrect(payload):
+def isCorrect(payload, ip):
 	day =  datetime.date.today().day
 	base = math.floor(translate(day,1,31,15,34))
 	scoreToBase = int2base(payload['score'],base)
 
-	correctToken = makeToken(payload, scoreToBase)
+	correctToken = makeToken(payload, scoreToBase, ip)
 	return payload['token'] == correctToken
