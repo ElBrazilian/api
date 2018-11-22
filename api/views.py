@@ -18,7 +18,7 @@ def postScore(request):
 		username = request.POST.get('username').strip()
 		score = request.POST.get('score').strip()
 
-		ip = request.POST.get('ip').strip()#getIp() # For debug, then => request.META.get('HTTP_X_FORWARDED_FOR')
+		ip = request.META.get('HTTP_X_FORWARDED_FOR')
 		payload = {
 			'token':token,
 			'username':username,

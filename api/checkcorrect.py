@@ -9,11 +9,11 @@ digs = string.digits + string.ascii_letters
 
 import requests
 import json
-def getIp():
-	request = requests.get('https://api.myip.com/')
-	ip = json.loads(request.content)['ip']
+# def getIp():
+# 	request = requests.get('https://api.myip.com/')
+# 	ip = json.loads(request.content)['ip']
 
-	return ip
+# 	return ip
 
 def int2base(x, base):
     if x < 0:
